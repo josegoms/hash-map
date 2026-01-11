@@ -4,6 +4,22 @@ class HashMap {
         this.capacity = 16;
         this.buckets = new Array(this.capacity);
     }
+    grow() {
+        //Check mathematical condition to grow
+        if ((this.length / this.capacity) > this.loadFactor) {
+            //Store actual nodes
+            let oldNodes = this.entries();
+
+            //Double capacity and recreate buckets
+            this.capacity *= 2;
+            this.buckets = new Array(this.capacity);
+
+            //Reappend previous nodes
+            for (let node of oldNodes) {
+                this.set(node[0], node[1]);
+            }
+        }
+    }
     hash(key) {
         //Accumulative
         let hashCode = 0;
