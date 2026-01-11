@@ -6,7 +6,7 @@ class HashMap {
     }
     grow() {
         //Check mathematical condition to grow
-        if ((this.length / this.capacity) > this.loadFactor) {
+        if ((this.length() / this.capacity) > this.loadFactor) {
             //Store actual nodes
             let oldNodes = this.entries();
 
@@ -15,8 +15,8 @@ class HashMap {
             this.buckets = new Array(this.capacity);
 
             //Reappend previous nodes
-            for (let node of oldNodes) {
-                this.set(node[0], node[1]);
+            for (let [key, value] of oldNodes) {
+                this.set(key, value);
             }
         }
     }
@@ -59,33 +59,29 @@ class HashMap {
         //Reference
         let current = this.buckets[index].head;
 
-        //Overwrite existent node
-        if (this.has(key)) {
+        //Overwrite existent nodes and append new ones
+        while (true) {
 
-            while (current !== null) {
-
-            //Equal keys
+            //Overwrite
             if (current.key === key) {
                 current.value = value;
                 return;
             }
 
-            current = current.next;
-            }
-        }
-
-        //Append new node
-        while (current !== null) {
+            //Add new one
             if (current.next === null) {
                 current.next = node;
                 this.grow();
+                return;
             }
+
+            current = current.next;
         }
     }
     get(key) {
         //Index and check
         const index = this.hash(key);
-        if (index < 0 || index >= buckets.length) {
+        if (index < 0 || index >= this.buckets.length) {
             throw new Error("Trying to access index out of bounds");
         }
 
@@ -110,7 +106,7 @@ class HashMap {
         }
 
         //Empty list and reference
-        if (!this.buckets[index]) return null;
+        if (!this.buckets[index]) return false;
         let current = this.buckets[index].head;
         
         //Find it
@@ -129,7 +125,7 @@ class HashMap {
         }
 
         //Empty list and reference
-        if (!this.buckets[index]) return null;
+        if (!this.buckets[index]) return false;
         let current = this.buckets[index].head;
 
         //First node
@@ -172,6 +168,7 @@ class HashMap {
         return count;
     }
     clear() {
+        this.capacity = 16;
         this.buckets = new Array(this.capacity);
     }
     keys() {
