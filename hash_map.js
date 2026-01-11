@@ -162,7 +162,7 @@ class HashMap {
         //Array to store all keys
         let keys = [];
 
-        //Loop over nodes
+        //Loop over array
         for (let i = 0; i < this.buckets.length; i++) {
             if (this.buckets[i]) {
 
@@ -175,5 +175,42 @@ class HashMap {
             }
         }
         return keys;
+    }
+    values() {
+        //Array to store all values
+        let values = [];
+
+        //Loop over array
+        for (let i = 0; i < this.buckets.length; i++) {
+            if (this.buckets[i]) {
+
+                //Linked lists
+                let current = this.buckets[i].head;
+                while (current !== null) {
+                    values.push(current.value);
+                    current = current.next;
+                }
+            }
+        }
+        return values;
+
+    }
+    entries() {
+        //Array to store entries
+        let entries = [];
+
+        //Loop over array
+        for (let i = 0; i < this.buckets.length; i++) {
+            if (this.buckets[i]) {
+
+                //Linked lists
+                let current = this.buckets[i].head;
+                while (current !== null) {
+                    entries.push([current.key, current.value]);
+                    current = current.next;
+                }
+            }
+        }
+        return entries;
     }
 }
