@@ -4,6 +4,22 @@ class HashSet {
         this.capacity = 16;
         this.buckets = new Array(this.capacity);
     }
+    grow() {
+        //Check mathematical condition to grow
+        if ((this.length() / this.capacity) > this.loadFactor) {
+            //Store actual nodes
+            let oldNodes = this.keys();
+
+            //Double capacity and recreate buckets
+            this.capacity *= 2;
+            this.buckets = new Array(this.capacity);
+
+            //Reappend previous nodes
+            for (let key of oldNodes) {
+                this.set(key);
+            }
+        }
+    }
     hash(key) {
         //Accumulative
         let hashCode = 0;
@@ -87,7 +103,7 @@ class HashSet {
         //First node
         if (current.key === key) {
             if (current.next === null) {
-                this.buckets[index].head = undefined;
+                this.buckets[index] = undefined;
                 return true;
             }
             this.buckets[index].head = current.next;
@@ -103,5 +119,46 @@ class HashSet {
             current = current.next;
         }
         return false;
-    }   
+    }
+    length() {
+        //Count
+        let count = 0;
+
+        //Count nodes
+        for (let i = 0; i < this.buckets.length; i++) {
+            if (this.buckets[i]) {
+                
+                //Linked list
+                let current = this.buckets[i].head;
+                while (current !== null) {
+                    current = current.next;
+                    count++;
+                }
+            }
+        }
+        
+        return count;
+    } 
+    clear() {
+        this.capacity = 16;
+        this.buckets = new Array(this.capacity);
+    }
+    keys() {
+        //Array to store all keys
+        let keys = [];
+
+        //Loop over array
+        for (let i = 0; i < this.buckets.length; i++) {
+            if (this.buckets[i]) {
+
+                //Linked lists
+                let current = this.buckets[i].head;
+                while (current !== null) {
+                    keys.push(current.key);
+                    current = current.next;
+                }
+            }
+        }
+        return keys;
+    }
 }
