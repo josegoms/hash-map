@@ -136,5 +136,44 @@ class HashMap {
         }
         return false;
     }
-    
+    length() {
+        //Count
+        let count = 0;
+
+        //Count nodes
+        for (let i = 0; i < this.buckets.length; i++) {
+            if (this.buckets[i]) {
+                
+                //Linked list
+                let current = this.buckets[i].head;
+                while (current !== null) {
+                    current = current.next;
+                    count++;
+                }
+            }
+        }
+        
+        return count;
+    }
+    clear() {
+        this.buckets = new Array(this.capacity);
+    }
+    keys() {
+        //Array to store all keys
+        let keys = [];
+
+        //Loop over nodes
+        for (let i = 0; i < this.buckets.length; i++) {
+            if (this.buckets[i]) {
+
+                //Linked lists
+                let current = this.buckets[i].head;
+                while (current !== null) {
+                    keys.push(current.key);
+                    current = current.next;
+                }
+            }
+        }
+        return keys;
+    }
 }
